@@ -36,4 +36,21 @@ public class StudentService {
         return studentRepository.getByName(student.getName());
     }
 
+    @Transactional
+    public Student merge(Student student) {
+        if (student.getId() == null)
+            throw new ResourceNotFoundException("Укажите id");
+
+        Student repositoryStudent = studentRepository.getById(student.getId());
+
+        if (student.getName() == null)
+            student.setName(repositoryStudent.getName());
+
+        if (student.getAge() == null)
+            student.setAge(repositoryStudent.getAge());
+
+        studentRepository.save(student);
+        return student;
+    }
+
 }

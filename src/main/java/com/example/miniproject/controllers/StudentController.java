@@ -74,7 +74,7 @@ public class StudentController {
     }
 
     @Operation(
-            summary = "Сохранение студента или создание нового",
+            summary = "Создание нового студента",
             responses = {
                     @ApiResponse(
                             description = "Успешный ответ", responseCode = "200",
@@ -83,12 +83,32 @@ public class StudentController {
             }
     )
     @PostMapping()
-    public StudentDto updateStudentById(@RequestBody
+    public StudentDto createNewStudent(@RequestBody
                                         @Parameter(description = "Данные для создания нового студента",
                                                 required = true) StudentDtoSave studentDtoSave) {
         Student student = studentService.saveStudent(studentMapper.mapStudentDtoSaveToStudent(studentDtoSave));
         return studentMapper.mapStudentToStudentDto(student);
     }
 
+    @Operation(
+            summary = "Запрос на изменение студента по id (изменяются только вписанные в json поля, id - обязательное поле)",
+            responses = {
+                    @ApiResponse(
+                            description = "Успешный ответ", responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = StudentDto.class))
+                    ),
+                    @ApiResponse(
+                            description = "Студент не найден", responseCode = "500",
+                            content = @Content(schema = @Schema(implementation = AppError.class))
+                    )
+            }
+    )
+    @PostMapping("/update")
+    public StudentDto updateStudent(@RequestBody
+                                       @Parameter(description = "Данные для изменения студента",
+                                               required = true) StudentDto studentDto) {
+        Student student = studentService.merge(studentMapper.mapStudentDtoToStudent(studentDto));
+        return studentMapper.mapStudentToStudentDto(student);
+    }
 
 }

@@ -25,6 +25,14 @@ public class StudentMapper {
         return student;
     }
 
+    public Student mapStudentDtoToStudent(StudentDto studentDto) {
+        Student student = new Student();
+        student.setId(studentDto.getId());
+        student.setName(studentDto.getName());
+        student.setAge(studentDto.getAge());
+        return student;
+    }
+
     public List<StudentDto> mapStudentListToStudentDtoList(List<Student> studentList) {
         return studentList.stream()
                 .map(this::mapStudentToStudentDto).toList();
