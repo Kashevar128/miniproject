@@ -37,11 +37,12 @@ public class StudentService {
     }
 
     @Transactional
-    public Student merge(Student student) {
-        if (student.getId() == null)
-            throw new ResourceNotFoundException("Укажите id");
+    public Student merge(Student student, Long id) {
+        Student repositoryStudent = studentRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Студент с id: " + id + " не найден и не может быть изменен")
+        );
 
-        Student repositoryStudent = studentRepository.getById(student.getId());
+        student.setId(repositoryStudent.getId());
 
         if (student.getName() == null)
             student.setName(repositoryStudent.getName());

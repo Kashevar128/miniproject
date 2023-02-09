@@ -84,14 +84,13 @@ public class StudentController {
     )
     @PostMapping()
     public StudentDto createNewStudent(@RequestBody
-                                        @Parameter(description = "Данные для создания нового студента",
-                                                required = true) StudentDtoSave studentDtoSave) {
+                                       @Parameter(required = true) StudentDtoSave studentDtoSave) {
         Student student = studentService.saveStudent(studentMapper.mapStudentDtoSaveToStudent(studentDtoSave));
         return studentMapper.mapStudentToStudentDto(student);
     }
 
     @Operation(
-            summary = "Запрос на изменение студента по id (изменяются только вписанные в json поля, id - обязательное поле)",
+            summary = "Запрос на изменение студента по id (оставьте в json только те поля, которые хотите изменить, остальные удалите)",
             responses = {
                     @ApiResponse(
                             description = "Успешный ответ", responseCode = "200",
@@ -103,11 +102,13 @@ public class StudentController {
                     )
             }
     )
-    @PostMapping("/update")
+    @PostMapping("/update/{id}")
     public StudentDto updateStudent(@RequestBody
-                                       @Parameter(description = "Данные для изменения студента",
-                                               required = true) StudentDto studentDto) {
-        Student student = studentService.merge(studentMapper.mapStudentDtoToStudent(studentDto));
+                                    @Parameter(required = true) StudentDtoSave studentDtoSave,
+                                    @PathVariable
+                                    @Parameter(description = "Идентификатор студента",
+                                            required = true) Long id) {
+        Student student = studentService.merge(studentMapper.mapStudentDtoSaveToStudent(studentDtoSave), id);
         return studentMapper.mapStudentToStudentDto(student);
     }
 
