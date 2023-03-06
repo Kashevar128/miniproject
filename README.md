@@ -9,3 +9,16 @@
 3. mvn clean install
 4. sudo docker-compose up -d
 5. Откыть в браузере http://localhost:11111/mini/swagger-ui/index.html
+
+Использованные технологии:
+
+* Java
+* Spring Boot
+* Maven
+* Spring Web Servies
+* H2 Database
+* Flyway Migration
+* Lombok
+* Swagger
+* Docker
+* Spring Data JPA
